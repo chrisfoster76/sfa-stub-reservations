@@ -5,6 +5,8 @@ var https = require("https");
 var bodyParser = require('body-parser');
 var fs = require('fs');
 
+var port = process.env.PORT || config.port;
+
 var app = express();
 app.use(bodyParser.json());
 
@@ -83,8 +85,8 @@ app.get("/:senderId", (req, res) => {
   });
 */
 
-app.listen(config.port, () => {
-    console.log("Server listening on port " + config.port);
+app.listen(port, () => {
+    console.log("Server listening on port " + port);
   });
 
 
