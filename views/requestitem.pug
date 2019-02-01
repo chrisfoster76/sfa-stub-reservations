@@ -1,0 +1,31 @@
+html
+    head
+        title Transfers
+        link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css")
+    body
+
+        h1 Transfer Requests for #{transferSenderAccountId}
+
+        table(class="table")
+            thead
+                tr
+                    th Hashed Request Id
+                    th Hashed Sending Employer AccountId
+                    th Hashed Receiving Employer Account Id
+                    th View
+                    th Cohort Reference
+                    th Request Status
+                    th Link
+            each item in requests
+                tr
+                    td #{item.HashedTransferRequestId}
+                    td #{item.HashedSendingEmployerAccountId}
+                    td #{item.HashedReceivingEmployerAccountId}
+                    td #{item.TransferType}
+                    td #{item.HashedCohortRef}
+                    td #{item.Status}
+                    td
+                        if item.TransferType == "AsSender"
+                            a(href="https://localhost:44348/commitments/accounts/" + item.HashedSendingEmployerAccountId + "/sender/transfers/" + item.HashedTransferRequestId) View
+                        else if item.TransferType == "AsReceiver"
+                            a(href="https://localhost:44348/commitments/accounts/" + item.HashedReceivingEmployerAccountId + "/receiver/transfers/" + item.HashedTransferRequestId) View
