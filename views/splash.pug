@@ -3,26 +3,36 @@ html
         title Reservations
         link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css")
     body
-        h1 Reservations Stub
+
+
+    div(class="container")
         
-        p This is a Reservations stub. This simulates the behaviour of the reservations Web and Api applications.
+        div(class="jumbotron")
+            h1(class="display-4") Reservations Stub
+            p(class="lead") This is stub web application for reservations to simulate the behaviour of the web and api applications for the purpose of testing integration for local development.
+            hr(class="my-4")
+            p(class="lead") 
         
-        p Based on
-            a(href="https://esfa-create-apprenticeship.herokuapp.com/archive/provider-v2/account-home") Prototype
+            h3(class="display-5") Usage
+                    
+            p User journey is based on: 
+                a(href="https://esfa-create-apprenticeship.herokuapp.com/archive/provider-v2/account-home") Prototype
+            
+            p Supports the following user journey:
+            
+            ol
+                li PAS Home page 
+                li 
+                    a(href="/inform") Reservations Inform page
+                li PAS Select Employer
+                li PAS Confirm Employer
+                li 
+                    a(href="/use-reservation") Use Reservation
+                li ProviderCommitments Add Apprentice
+                li Reservations API access
         
-        p Requires use under Provider UKPRN 10005077
-        
-        p Supports user journey:
-        
-        ol
-            li PAS Home page 
-            li 
-                a(href="/inform") Reservations Inform page
-            li PAS Select Employer
-            li PAS Confirm Employer
-            li 
-                a(href="/use-reservation") Use Reservation
-            li ProviderCommitments Add Apprentice
-            li Reservations API access
-       
-        
+            hr(class="my-4")
+            
+            h3(class="display-5") Caveats and limitations
+            
+            p Supports only Provider UKPRN 10005077
