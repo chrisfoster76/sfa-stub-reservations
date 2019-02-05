@@ -1,13 +1,14 @@
-var config = require('./config');
-var express = require("express");
-var http = require("http");
-var https = require("https");
-var bodyParser = require('body-parser');
-var fs = require('fs');
+const config = require('./config');
+const express = require("express");
+const http = require("http");
+const https = require("https");
+const bodyParser = require('body-parser');
+const fs = require('fs');
+const pug = require('pug');
 
-var port = process.env.PORT || config.port;
+const port = process.env.PORT || config.port;
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 
 app.set('view engine', 'pug');
@@ -16,74 +17,29 @@ app.get("/", (req, res) => {
   res.render('splash');
 });
 
+app.get("/:providerId/reservations", (req, res) => {
 
-app.get("/inform", (req, res) => {
-    res.render('inform');
+    var viewmodel = {
+        providerId: req.params.providerId,
+        url: "https://127.0.0.1:44347/"+ req.params.providerId + "/apprentices/reservations/create"
+    };
+
+    res.render('start', viewmodel);
+});
+
+app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (req, res) => {
+
+    var viewmodel = {
+        providerId : req.params.providerId,
+        accountId : req.params.accountId,
+        accountLegalEntityId: req.params.accountLegalEntityId,
+        reservationUrl: "https://localhost:5001/commitments/" + req.params.providerId + "/cohorts/add-apprenticeship"
+    };
+    
+    res.render('use-reservation', viewmodel);
 });
 
 
-app.get("/use-reservation", (req, res) => {
-    res.render('use-reservation');
-});
-
-
-/*
-app.get("/:senderId", (req, res) => {
-      
-  //console.log(config);
-
-  var transferSenderAccountId = req.params.senderId;
-
-  if(transferSenderAccountId === null){
-    console.log("Sender id not specified in route");
-    return;
-  } 
-
-  console.log("Received request for sender id: " + transferSenderAccountId);
-
-  var port = https;
-
-  var options = {
-    hostname: config.api_hostname,
-    port: config.api_port,
-    path: String.Format("/api/employer/{0}/transfers", transferSenderAccountId),
-    method: "GET",
-    rejectUnauthorized: false,
-    headers: {
-      accept: "application/json",
-      Authorization: "Bearer " + config.api_bearer_token
-    },
-  };
-
-  var req = port.request(options, function(result)
-  {
-      var buffer = "";
-      result.on('data', function (chunk) { buffer += chunk; });
-
-       result.on('end', function() {
-
-          //console.log(buffer);
-          var transferList = JSON.parse(buffer);
-          
-          var viewmodel = {
-            transferSenderAccountId: transferSenderAccountId,
-            requests: transferList
-          };
-          
-          res.render('requestitem', viewmodel);
-
-      });
-  });
-
-  req.on('error', function(err) {
-      res.send(err.message);
-      console.log(err.message);
-  });
-
-  req.end();
-
-  });
-*/
 
 app.listen(port, () => {
     console.log("Server listening on port " + port);
