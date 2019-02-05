@@ -2,7 +2,7 @@
   "name": "stub-reservations",
   "version": "1.0.0",
   "description": "Subbed Reservations Web and Api",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

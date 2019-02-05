@@ -5,22 +5,25 @@ const https = require("https");
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const pug = require('pug');
+const path = require('path');
 
 const port = process.env.PORT || config.port;
 
 const app = express();
+app.use(express.static('public'));
+
 app.use(bodyParser.json());
 
 app.set('view engine', 'pug');
 
 app.get("/", (req, res) => {
-  res.render('splash');
+    res.render('splash');
 });
 
 app.get("/:providerId/reservations", (req, res) => {
 
     var viewmodel = {
-        providerId: req.params.providerId,
+        providerId:  req.params.providerId,
         url: "https://127.0.0.1:44347/"+ req.params.providerId + "/apprentices/reservations/create"
     };
 
