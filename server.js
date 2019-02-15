@@ -36,12 +36,16 @@ app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (re
         providerId : req.params.providerId,
         accountId : req.params.accountId,
         accountLegalEntityId: req.params.accountLegalEntityId,
-        reservationUrl: "https://localhost:5001/commitments/" + req.params.providerId + "/cohorts/add-apprenticeship"
+        reservationUrl: "https://localhost:5001/commitments/" + req.params.providerId + "/cohorts/add-apprenticeship?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
     };
     
     res.render('use-reservation', viewmodel);
 });
 
+
+app.get('/api/*',(req, res) => {
+    sendFile(res, req.url, req.method);
+});
 
 
 app.listen(port, () => {
@@ -56,4 +60,21 @@ String.Format = function (b) {
       var c = parseInt(b.match(/\d/)[0]);
       return a[c + 1]
   })
+};
+
+
+sendFile = function(res, url, method) {
+
+    const filename = ("responses" + url.replace(/\/$/, '') + '_' + method + '.json').toLowerCase();
+
+    console.log("Processing request for " + path.join(__dirname, filename));
+
+    if(!fs.existsSync(filename))
+    {
+        res.status(404).send('No such file: ' + filename);
+        return;
+    }
+
+    res.header("Content-Type",'application/json');
+    res.sendFile(path.join(__dirname, filename));
 };
