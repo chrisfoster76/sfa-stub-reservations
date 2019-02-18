@@ -36,7 +36,7 @@ app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (re
         providerId : req.params.providerId,
         accountId : req.params.accountId,
         accountLegalEntityId: req.params.accountLegalEntityId,
-        reservationUrl: "https://localhost:5001/commitments/" + req.params.providerId + "/cohorts/add-apprenticeship?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
+        reservationUrl: "https://localhost:5001/draft/" + req.params.providerId + "/add-apprenticeship?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
     };
     
     res.render('use-reservation', viewmodel);
