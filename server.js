@@ -52,7 +52,7 @@ app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (re
                     + "&employerAccountPublicHashedId=" + req.params.accountId
                     + "&employerAccountLegalEntityPublicHashedId=" + req.params.accountLegalEntityId
                     + "&courseCode=244"
-                    + "&startDate=062019"
+                    + "&startMonthYear=062019"
 
             }
         ]
