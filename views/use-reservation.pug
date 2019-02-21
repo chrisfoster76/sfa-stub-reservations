@@ -16,17 +16,23 @@ html
 
                 p From here the user will either use an existing, or create a new, reservation, ultimately electing to use it
 
-                p TODO: present a list of hard-coded reservations in here, which will match those in the api in terms of rules
-                
-                p Provider UKPRN: #{providerId}
-                p Employer Account Public Hashed Id: #{accountId}
-                p Account Legal Entity Id: #{accountLegalEntityId}
-                
-                div(class="card" style="width: 18rem;")
-                    div(class="card-body")
-                        h5(class="card-title") Sample Reservation
-                        p(class="card-text") ec6b806b-0491-44af-bc4f-68366779b931
-                        a(href=reservationUrl class="btn btn-success") Use Reservation                
+                p
+                    span Provider UKPRN: #{providerId}
+                    br
+                    span Employer Account Public Hashed Id: #{accountId}
+                    br
+                    span Employer Account LegalEntity Public Hashed Id: #{accountLegalEntityId}
+
+
+                div(class="row")
+                        each r in reservations
+                            div(class="col-md-6")
+                                div(class="card")
+                                    div(class="card-block")
+                                        div(class="card-body")
+                                            h5(class="card-title") #{r.reservationName}
+                                            p(class="card-text") #{r.reservationDescription}
+                                            a(href=r.reservationUrl class="btn btn-success") Use Reservation                
                 
                 
                 hr(class="my-4")

@@ -36,7 +36,27 @@ app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (re
         providerId : req.params.providerId,
         accountId : req.params.accountId,
         accountLegalEntityId: req.params.accountLegalEntityId,
-        reservationUrl: "https://localhost:5001/draft/" + req.params.providerId + "/add-apprenticeship?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
+        reservations : [
+            {
+                reservationName: "Levy-style Reservation",
+                reservationDescription: "Levy example (no course or start date selected) [ec6b806b-0491-44af-bc4f-68366779b931]",
+                reservationUrl: "https://localhost:5001/" + req.params.providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
+                    + "&employerAccountPublicHashedId=" + req.params.accountId
+                    + "&employerAccountLegalEntityPublicHashedId=" + req.params.accountLegalEntityId
+                
+            },
+            {
+                reservationName: "Reservation with for Geospatial Survey Technician (244)",
+                reservationDescription: "Start date: June 2019 [faac2df3-110f-4c94-8d53-96c4e1a64b00]",
+                reservationUrl: "https://localhost:5001/" + req.params.providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
+                    + "&employerAccountPublicHashedId=" + req.params.accountId
+                    + "&employerAccountLegalEntityPublicHashedId=" + req.params.accountLegalEntityId
+                    + "&courseCode=244"
+                    + "&startDate=062019"
+
+            }
+        ]
+        
     };
     
     res.render('use-reservation', viewmodel);
