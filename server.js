@@ -20,47 +20,39 @@ app.get("/", (req, res) => {
     res.render('splash');
 });
 
+
 app.get("/:providerId/reservations", (req, res) => {
 
+    var providerId = 10005077;
+    var aleId = 'YZWX27';
+    
     var viewmodel = {
-        providerId:  req.params.providerId,
-        url: "https://127.0.0.1:44347/"+ req.params.providerId + "/apprentices/reservations/create"
-    };
-
-    res.render('start', viewmodel);
-});
-
-app.get("/:providerId/account/:accountId/legalentity/:accountLegalEntityId", (req, res) => {
-
-    var viewmodel = {
-        providerId : req.params.providerId,
-        accountId : req.params.accountId,
-        accountLegalEntityId: req.params.accountLegalEntityId,
+        providerId : providerId,
+        accountLegalEntityId: aleId,
         reservations : [
             {
                 reservationName: "Levy-style Reservation",
                 reservationDescription: "Levy example (no course or start date selected) [ec6b806b-0491-44af-bc4f-68366779b931]",
-                reservationUrl: "https://localhost:5001/" + req.params.providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
-                    + "&employerAccountPublicHashedId=" + req.params.accountId
-                    + "&employerAccountLegalEntityPublicHashedId=" + req.params.accountLegalEntityId
-                
+                reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
+                    + "&employerAccountLegalEntityPublicHashedId=" + aleId
+
             },
             {
                 reservationName: "Reservation with for Geospatial Survey Technician (244)",
                 reservationDescription: "Start date: June 2019 [faac2df3-110f-4c94-8d53-96c4e1a64b00]",
-                reservationUrl: "https://localhost:5001/" + req.params.providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
-                    + "&employerAccountPublicHashedId=" + req.params.accountId
-                    + "&employerAccountLegalEntityPublicHashedId=" + req.params.accountLegalEntityId
+                reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
+                    + "&employerAccountLegalEntityPublicHashedId=" + aleId
                     + "&courseCode=244"
                     + "&startMonthYear=062019"
 
             }
         ]
-        
+
     };
-    
+
     res.render('use-reservation', viewmodel);
 });
+
 
 
 app.get('/api/*',(req, res) => {
