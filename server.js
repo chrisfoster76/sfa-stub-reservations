@@ -24,24 +24,26 @@ app.get("/", (req, res) => {
 app.get("/:providerId/reservations", (req, res) => {
 
     var providerId = 10005077;
-    var aleId = 'YZWX27';
     
     var viewmodel = {
         providerId : providerId,
-        accountLegalEntityId: aleId,
         reservations : [
             {
-                reservationName: "Levy-style Reservation",
-                reservationDescription: "Levy example (no course or start date selected) [ec6b806b-0491-44af-bc4f-68366779b931]",
+                reservationTitle: "MegaCorp (levy)",
+                reservationSubtitle: "No pre-selection of values; validation always succeeds",
+                accountLegalEntityId: 'YZWX27',
+                reservationDescription: "[ec6b806b-0491-44af-bc4f-68366779b931]",
                 reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
-                    + "&employerAccountLegalEntityPublicHashedId=" + aleId
+                    + "&employerAccountLegalEntityPublicHashedId=" + 'YZWX27'
 
             },
             {
-                reservationName: "Reservation with for Geospatial Survey Technician (244)",
-                reservationDescription: "Start date: June 2019 [faac2df3-110f-4c94-8d53-96c4e1a64b00]",
+                reservationTitle: "Rapid Logistics (non levy)",
+                reservationSubtitle: "Reservation with for Geospatial Survey Technician (244) June 2019",
+                accountLegalEntityId: '7EKPG7',
+                reservationDescription: "[faac2df3-110f-4c94-8d53-96c4e1a64b00]",
                 reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
-                    + "&employerAccountLegalEntityPublicHashedId=" + aleId
+                    + "&employerAccountLegalEntityPublicHashedId=" + '7EKPG7'
                     + "&courseCode=244"
                     + "&startMonthYear=062019"
 
@@ -58,6 +60,44 @@ app.get("/:providerId/reservations", (req, res) => {
 app.get('/api/*',(req, res) => {
     sendFile(res, req.url, req.method);
 });
+
+
+app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
+    
+    var course = req.body.courseCode;
+    var startDate = req.body.startDate;
+    
+    //Levy payer gets a green light
+    if(req.params.accountId === "8194")
+    {
+        console.log("Reservation validation request from levy payer - will green light");
+        sendFile(res, '/api/okResponse.json');
+    }
+    
+    //Non-levy payer
+    if(req.params.accountId === "30060")
+    {
+        console.log("Reservation validation request from non-levy payer");
+
+        if(course === "411")
+        {
+            sendFile(res, '/api/courseErrorResponse.json');
+            return;
+        }
+        
+        if(startDate === "2019-01-01")
+        {
+            sendFile(res, '/api/startDateErrorResponse.json');
+            return;
+        }
+    }
+
+    //default to ok for happy testing
+    sendFile(res, '/api/okResponse.json');
+});
+
+
+// return _client.PutAsJson<ValidationReservationMessage, ValidationResult>($"api/accounts/{request.AccountId}/reservations/{request.ReservationId}", request, cancellationToken);
 
 
 app.listen(port, () => {
@@ -89,4 +129,11 @@ sendFile = function(res, url, method) {
 
     res.header("Content-Type",'application/json');
     res.sendFile(path.join(__dirname, filename));
+};
+
+sendFile = function(res, filename) {
+  const fullFileName = "responses/" + filename;
+    res.header("Content-Type",'application/json');
+    res.sendFile(path.join(__dirname, fullFileName));
+
 };

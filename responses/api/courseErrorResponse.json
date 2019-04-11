@@ -1,0 +1,9 @@
+{
+  "ValidationErrors" : [
+    {
+      "PropertyName" : "TrainingCode",
+      "Reason": "Funding has been withdrawn for this course",
+      "Code": "BadTrainingCode"
+    }
+  ]
+}

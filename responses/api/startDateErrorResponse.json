@@ -1,0 +1,9 @@
+{
+  "ValidationErrors" : [
+    {
+      "PropertyName" : "StartDate",
+      "Reason": "This start date is invalid",
+      "Code": "BadStartDate"
+    }
+  ]
+}
