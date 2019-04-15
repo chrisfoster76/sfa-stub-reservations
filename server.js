@@ -23,9 +23,9 @@ app.get("/", (req, res) => {
 
 app.get("/:providerId/reservations", (req, res) => {
 
-    var providerId = 10005077;
+    let providerId = 10005077;
     
-    var viewmodel = {
+    let viewmodel = {
         providerId : providerId,
         reservations : [
             {
@@ -35,7 +35,6 @@ app.get("/:providerId/reservations", (req, res) => {
                 reservationDescription: "[ec6b806b-0491-44af-bc4f-68366779b931]",
                 reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
                     + "&employerAccountLegalEntityPublicHashedId=" + 'YZWX27'
-
             },
             {
                 reservationTitle: "Rapid Logistics (non levy)",
@@ -46,10 +45,8 @@ app.get("/:providerId/reservations", (req, res) => {
                     + "&employerAccountLegalEntityPublicHashedId=" + '7EKPG7'
                     + "&courseCode=244"
                     + "&startMonthYear=062019"
-
             }
         ]
-
     };
 
     res.render('use-reservation', viewmodel);
@@ -64,8 +61,8 @@ app.get('/api/*',(req, res) => {
 
 app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
-    var course = req.body.courseCode;
-    var startDate = req.body.startDate;
+    let course = req.body.CourseCode;
+    let startDate = req.body.StartDate;
     
     //Levy payer gets a green light
     if(req.params.accountId === "8194")
@@ -85,13 +82,31 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
             return;
         }
         
-        if(startDate === "2019-01-01")
+        if(startDate === "2019-01-01T00:00:00")
         {
             sendFile(res, '/api/startDateErrorResponse.json');
             return;
         }
     }
+    
+    //Specific reservations for tester, based on the reservation id
+    if(req.params.reservationId === "51923bfc-c363-4903-8311-032b14ae82bd")
+    {
+        console.log("Reservation validation request for specific reservation id");
 
+        if(course === "411")
+        {
+            sendFile(res, '/api/courseErrorResponse.json');
+            return;
+        }
+
+        if(startDate === "2019-01-01T00:00:00")
+        {
+            sendFile(res, '/api/startDateErrorResponse.json');
+            return;
+        }
+    }
+    
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
