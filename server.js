@@ -61,8 +61,8 @@ app.get('/api/*',(req, res) => {
 
 app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
-    let course = req.body.CourseCode;
-    let startDate = req.body.StartDate;
+    let course = req.body.CourseCode || req.body.courseCode;
+    let startDate = req.body.StartDate || req.body.startDate;
     
     //Levy payer gets a green light
     if(req.params.accountId === "8194")
