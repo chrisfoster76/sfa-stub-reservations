@@ -2,7 +2,7 @@
   "ValidationErrors" : [
     {
       "PropertyName" : "StartDate",
-      "Reason": "This start date is invalid",
+      "Reason": "This start date is invalid for reservation",
       "Code": "BadStartDate"
     }
   ]
