@@ -72,9 +72,9 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     }
     
     //Non-levy payer
-    if(req.params.accountId === "30060")
+   /* if(req.params.accountId === "30060")
     {
-        console.log("Reservation validation request from non-levy payer");
+        console.log("Reservation validation request from non-levy payer");*/
 
         if(course === "411")
         {
@@ -87,7 +87,7 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
             sendFile(res, '/api/startDateErrorResponse.json');
             return;
         }
-    }
+   /* }
     
     //Specific reservations for tester, based on the reservation id
     if(req.params.reservationId === "51923bfc-c363-4903-8311-032b14ae82bd")
@@ -105,7 +105,7 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
             sendFile(res, '/api/startDateErrorResponse.json');
             return;
         }
-    }
+    }*/
     
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
