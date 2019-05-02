@@ -29,7 +29,7 @@ app.get("/:providerId/reservations", (req, res) => {
         providerId : providerId,
         reservations : [
             {
-                reservationTitle: "MegaCorp (levy)",
+                reservationTitle: "MegaCorp Pharmaceuticals (levy)",
                 reservationSubtitle: "No pre-selection of values; validation always succeeds",
                 accountLegalEntityId: 'YZWX27',
                 reservationDescription: "[ec6b806b-0491-44af-bc4f-68366779b931]",
