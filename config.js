@@ -4,3 +4,6 @@ var config = {};
 config.port = 3203;
 
 module.exports = config;
+
+
+config.providerCommitmentsBaseUrl = "https://localhost:5001";

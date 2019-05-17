@@ -18,6 +18,9 @@ html
 
                 p
                     span Provider UKPRN: #{providerId}
+                    if cohortRef !== undefined
+                        br
+                        span Cohort Reference: #{cohortRef}
 
                 div(class="row")
                         each r in reservations

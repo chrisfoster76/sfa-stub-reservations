@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const pug = require('pug');
 const path = require('path');
+const uuidv1 = require('uuid/v1');
 
 const port = process.env.PORT || config.port;
 
@@ -21,10 +22,64 @@ app.get("/", (req, res) => {
 });
 
 
+app.get("/:providerId/:employerId/select", (req, res) => {
+    
+    let providerId = req.params.providerId;
+    let employerId = req.params.employerId;
+    let cohortRef = req.query.cohortReference || req.query.CohortReference;
+    
+    console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
+
+    //simulate levy-payer auto create and redirect
+    if(employerId == "YZWX27" || employerId == "7N3MEY")
+    {
+        console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
+        
+        var redirectUrl = String.Format("{0}/{1}/unapproved/{2}/add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}",
+            config.providerCommitmentsBaseUrl,
+            providerId,
+            cohortRef,
+            uuidv1(),
+            employerId
+        );
+        
+        res.redirect(redirectUrl);
+        return;
+    }
+    
+    //non-levy payer must select a reservation
+    let viewmodel = {
+        providerId : providerId,
+        cohortRef: cohortRef,
+        reservations : [
+            {
+                reservationTitle: "Geospatial Survey Technician (244) June 2019",
+                reservationSubtitle: "",
+                accountLegalEntityId: employerId,
+                reservationDescription: "",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}/add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
+                    config.providerCommitmentsBaseUrl,
+                    providerId,
+                    cohortRef,
+                    uuidv1(),
+                    employerId,
+                    "244",
+                    "062019"
+                )
+            }
+        ]
+    };
+    
+    res.render('select-reservation', viewmodel);
+});
+    
+
 app.get("/:providerId/reservations", (req, res) => {
 
-    let providerId = 10005077;
-    
+    let providerId = req.params.providerId;
+
+    console.log("Reservation selection for Provider " + providerId);
+
     let viewmodel = {
         providerId : providerId,
         reservations : [
@@ -71,48 +126,22 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
         sendFile(res, '/api/okResponse.json');
     }
     
-    //Non-levy payer
-   /* if(req.params.accountId === "30060")
+    //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
+    if(course === "411")
     {
-        console.log("Reservation validation request from non-levy payer");*/
-
-        if(course === "411")
-        {
-            sendFile(res, '/api/courseErrorResponse.json');
-            return;
-        }
-        
-        if(startDate === "2019-01-01T00:00:00")
-        {
-            sendFile(res, '/api/startDateErrorResponse.json');
-            return;
-        }
-   /* }
+        sendFile(res, '/api/courseErrorResponse.json');
+        return;
+    }
     
-    //Specific reservations for tester, based on the reservation id
-    if(req.params.reservationId === "51923bfc-c363-4903-8311-032b14ae82bd")
+    if(startDate === "2019-01-01T00:00:00")
     {
-        console.log("Reservation validation request for specific reservation id");
-
-        if(course === "411")
-        {
-            sendFile(res, '/api/courseErrorResponse.json');
-            return;
-        }
-
-        if(startDate === "2019-01-01T00:00:00")
-        {
-            sendFile(res, '/api/startDateErrorResponse.json');
-            return;
-        }
-    }*/
+        sendFile(res, '/api/startDateErrorResponse.json');
+        return;
+    }
     
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
-
-
-// return _client.PutAsJson<ValidationReservationMessage, ValidationResult>($"api/accounts/{request.AccountId}/reservations/{request.ReservationId}", request, cancellationToken);
 
 
 app.listen(port, () => {
