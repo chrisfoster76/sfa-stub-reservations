@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 
 //Reservation selection page, used in "Add Another Apprentice" journey
-app.get("/:providerId/:employerId/select", (req, res) => {
+app.get("/:providerId/reservations/:employerId/select", (req, res) => {
     
     let providerId = req.params.providerId;
     let employerId = req.params.employerId;
@@ -32,14 +32,14 @@ app.get("/:providerId/:employerId/select", (req, res) => {
     console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
 
     //simulate levy-payer auto create and redirect
-    if(employerId == "XEGE5X" || employerId == "XJGZ72")
+    if(employerId === "XEGE5X" || employerId === "XJGZ72")
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
-        var redirectUrl = String.Format("{0}/{1}/unapproved/{2}/add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}",
+        var redirectUrl = String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}",
             config.providerCommitmentsBaseUrl,
             providerId,
-            cohortRef,
+            cohortRef === undefined ? "" : cohortRef + "/",
             uuidv1(),
             employerId
         );
@@ -58,10 +58,10 @@ app.get("/:providerId/:employerId/select", (req, res) => {
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
                 reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}/add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
                     config.providerCommitmentsBaseUrl,
                     providerId,
-                    cohortRef,
+                    cohortRef === undefined ? "" : cohortRef + "/",
                     uuidv1(),
                     employerId,
                     "244",
