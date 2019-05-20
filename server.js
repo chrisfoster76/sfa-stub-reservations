@@ -89,19 +89,23 @@ app.get("/:providerId/reservations", (req, res) => {
                 reservationTitle: "MegaCorp Pharmaceuticals (levy)",
                 reservationSubtitle: "No pre-selection of values; validation always succeeds",
                 accountLegalEntityId: 'XEGE5X',
-                reservationDescription: "[ec6b806b-0491-44af-bc4f-68366779b931]",
-                reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
-                    + "&employerAccountLegalEntityPublicHashedId=" + 'XEGE5X'
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}",
+                    config.providerCommitmentsBaseUrl,
+                    providerId,
+                    uuidv1(),
+                    'XEGE5X')
             },
             {
                 reservationTitle: "Rapid Logistics (non levy)",
                 reservationSubtitle: "Reservation with for Geospatial Survey Technician (244) June 2019",
                 accountLegalEntityId: 'X9JE72',
-                reservationDescription: "[faac2df3-110f-4c94-8d53-96c4e1a64b00]",
-                reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
-                    + "&employerAccountLegalEntityPublicHashedId=" + 'X9JE72'
-                    + "&courseCode=244"
-                    + "&startMonthYear=062019"
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
+                    config.providerCommitmentsBaseUrl,
+                    providerId,
+                    uuidv1(),
+                    'X9JE72',
+                    "244",
+                    "062019")
             }
         ]
     };
