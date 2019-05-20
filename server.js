@@ -22,6 +22,7 @@ app.get("/", (req, res) => {
 });
 
 
+//Reservation selection page, used in "Add Another Apprentice" journey
 app.get("/:providerId/:employerId/select", (req, res) => {
     
     let providerId = req.params.providerId;
@@ -31,7 +32,7 @@ app.get("/:providerId/:employerId/select", (req, res) => {
     console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
 
     //simulate levy-payer auto create and redirect
-    if(employerId == "YZWX27" || employerId == "7N3MEY")
+    if(employerId == "XEGE5X" || employerId == "XJGZ72")
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
@@ -74,6 +75,7 @@ app.get("/:providerId/:employerId/select", (req, res) => {
 });
     
 
+//Reservations endpoint - simulates start of Reservations journey
 app.get("/:providerId/reservations", (req, res) => {
 
     let providerId = req.params.providerId;
@@ -86,18 +88,18 @@ app.get("/:providerId/reservations", (req, res) => {
             {
                 reservationTitle: "MegaCorp Pharmaceuticals (levy)",
                 reservationSubtitle: "No pre-selection of values; validation always succeeds",
-                accountLegalEntityId: 'YZWX27',
+                accountLegalEntityId: 'XEGE5X',
                 reservationDescription: "[ec6b806b-0491-44af-bc4f-68366779b931]",
                 reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=ec6b806b-0491-44af-bc4f-68366779b931"
-                    + "&employerAccountLegalEntityPublicHashedId=" + 'YZWX27'
+                    + "&employerAccountLegalEntityPublicHashedId=" + 'XEGE5X'
             },
             {
                 reservationTitle: "Rapid Logistics (non levy)",
                 reservationSubtitle: "Reservation with for Geospatial Survey Technician (244) June 2019",
-                accountLegalEntityId: '7EKPG7',
+                accountLegalEntityId: 'X9JE72',
                 reservationDescription: "[faac2df3-110f-4c94-8d53-96c4e1a64b00]",
                 reservationUrl: "https://localhost:5001/" + providerId + "/unapproved/add-apprentice?reservationId=faac2df3-110f-4c94-8d53-96c4e1a64b00"
-                    + "&employerAccountLegalEntityPublicHashedId=" + '7EKPG7'
+                    + "&employerAccountLegalEntityPublicHashedId=" + 'X9JE72'
                     + "&courseCode=244"
                     + "&startMonthYear=062019"
             }
