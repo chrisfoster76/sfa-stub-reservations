@@ -17,15 +17,6 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'pug');
 
-//lower-case all querystring parameters
-app.use(function(req, res, next) {
-    for (var key in req.query)
-    {
-        req.query[key.toLowerCase()] = req.query[key];
-    }
-    next();
-});
-
 
 //Splash page
 app.get("/", (req, res) => {
@@ -40,9 +31,9 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
     let providerId = req.params.providerId;
     let employerId = req.params.employerId;
     
-    let cohortRef = req.query.cohortReference || req.query.CohortReference;
-    let transferSenderId = req.query.transfersenderid;
-    
+    let cohortRef = req.get("cohortReference");
+    let transferSenderId = req.get("transferSenderId");
+   
     console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
     if(transferSenderId !== undefined)
     {
@@ -209,3 +200,14 @@ sendFile = function(res, filename) {
 };
 
 
+express.request.get = function(parameterName) {
+
+    for (var key in this.query)
+    {
+        if(key.toLowerCase() === parameterName.toLowerCase())
+        {
+            return this.query[key]; 
+        }
+    }
+    
+};
