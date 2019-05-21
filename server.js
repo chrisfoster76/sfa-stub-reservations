@@ -17,31 +17,50 @@ app.use(bodyParser.json());
 
 app.set('view engine', 'pug');
 
+//lower-case all querystring parameters
+app.use(function(req, res, next) {
+    for (var key in req.query)
+    {
+        req.query[key.toLowerCase()] = req.query[key];
+    }
+    next();
+});
+
+
+//Splash page
 app.get("/", (req, res) => {
     res.render('splash');
 });
 
 
 //Reservation selection page, used in "Add Another Apprentice" journey
+//If transfer sender id is included, the endpoint assumes that the sender is a levy payer so the user gets an "auto" reservation
 app.get("/:providerId/reservations/:employerId/select", (req, res) => {
     
     let providerId = req.params.providerId;
     let employerId = req.params.employerId;
+    
     let cohortRef = req.query.cohortReference || req.query.CohortReference;
+    let transferSenderId = req.query.transfersenderid;
     
     console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
+    if(transferSenderId !== undefined)
+    {
+        console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
+    }
 
     //simulate levy-payer auto create and redirect
-    if(employerId === "XEGE5X" || employerId === "XJGZ72")
+    if(employerId === "XEGE5X" || employerId === "XJGZ72" || transferSenderId !== undefined)
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
-        var redirectUrl = String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}",
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}add-apprentice?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}{5}",
             config.providerCommitmentsBaseUrl,
             providerId,
             cohortRef === undefined ? "" : cohortRef + "/",
             uuidv1(),
-            employerId
+            employerId,
+            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
         );
         
         res.redirect(redirectUrl);
@@ -120,9 +139,10 @@ app.get('/api/*',(req, res) => {
 });
 
 
+//Reservations API validation endpoint
 app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
-    let course = req.body.CourseCode || req.body.courseCode;
+    let course = req.body.coursecode || req.body.courseCode;
     let startDate = req.body.StartDate || req.body.startDate;
     
     //Levy payer gets a green light
@@ -187,3 +207,5 @@ sendFile = function(res, filename) {
     res.sendFile(path.join(__dirname, fullFileName));
 
 };
+
+
