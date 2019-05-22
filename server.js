@@ -125,19 +125,16 @@ app.get("/:providerId/reservations", (req, res) => {
 
 
 
-app.get('/api/*',(req, res) => {
-    sendFile(res, req.url, req.method);
-});
-
 
 //Reservations API validation endpoint
-app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
+app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
-    let course = req.body.coursecode || req.body.courseCode;
-    let startDate = req.body.StartDate || req.body.startDate;
+    let accountId = req.params.accountId;
+    let course = req.get("courseCode");
+    let startDate = req.get("startDate");
     
     //Levy payer gets a green light
-    if(req.params.accountId === "8194")
+    if(accountId === "8194")
     {
         console.log("Reservation validation request from levy payer - will green light");
         sendFile(res, '/api/okResponse.json');
@@ -158,6 +155,43 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
+});
+
+
+//Reservations API validation endpoint - OLD Version. Should be removed!
+app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
+
+    let course = req.body.coursecode || req.body.courseCode;
+    let startDate = req.body.StartDate || req.body.startDate;
+
+    //Levy payer gets a green light
+    if(req.params.accountId === "8194")
+    {
+        console.log("Reservation validation request from levy payer - will green light");
+        sendFile(res, '/api/okResponse.json');
+    }
+
+    //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
+    if(course === "411")
+    {
+        sendFile(res, '/api/courseErrorResponse.json');
+        return;
+    }
+
+    if(startDate === "2019-01-01T00:00:00")
+    {
+        sendFile(res, '/api/startDateErrorResponse.json');
+        return;
+    }
+
+    //default to ok for happy testing
+    sendFile(res, '/api/okResponse.json');
+});
+
+
+/* not sure why this is here */
+app.get('/api/*',(req, res) => {
+    sendFile(res, req.url, req.method);
 });
 
 
