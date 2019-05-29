@@ -160,8 +160,8 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 //Reservations API validation endpoint - OLD Version. Should be removed!
 app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 
-    let course = req.body.coursecode || req.body.courseCode;
-    let startDate = req.body.StartDate || req.body.startDate;
+    let course = req.body.coursecode || req.body.courseCode || req.body.CourseCode;
+    let startDate = req.body.StartDate || req.body.startDate || req.body.startdate;
     
     console.log(String.Format("Validation request for Account {0}, Course: {1}, StartDate: {2}", req.params.accountId, course, startDate));
 
