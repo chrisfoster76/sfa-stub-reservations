@@ -162,6 +162,8 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 
     let course = req.body.coursecode || req.body.courseCode;
     let startDate = req.body.StartDate || req.body.startDate;
+    
+    console.log(String.Format("Validation request for Account {0}, Course: {1}, StartDate: {2}", req.params.accountId, course, startDate));
 
     //Levy payer gets a green light
     if(req.params.accountId === "8194")
@@ -173,6 +175,7 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
     if(course === "411")
     {
+        console.log("Course 411 - simulates course error");
         sendFile(res, '/api/courseErrorResponse.json');
         return;
     }
