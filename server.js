@@ -137,19 +137,21 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     //Levy payer gets a green light
     if(accountId === "8194")
     {
-        console.log("Reservation validation request from levy payer - will green light");
+        console.log("Reservation validation request from levy payer - simulates auto-create-reservation");
         sendFile(res, '/api/okResponse.json');
     }
     
     //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
     if(course === "411")
     {
+        console.log("Course 411 - simulates course error");
         sendFile(res, '/api/courseErrorResponse.json');
         return;
     }
     
     if(dates.compare(startDate, new Date("2019-01-01")) === 0)
     {
+        console.log("01 Jan 2019 - simulates start date error");
         sendFile(res, '/api/startDateErrorResponse.json');
         return;
     }
