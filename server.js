@@ -123,6 +123,45 @@ app.get("/:providerId/reservations", (req, res) => {
     res.render('use-reservation', viewmodel);
 });
 
+/* new endpoints to go here */
+app.get('/api/accounts/:accountId/status',(req, res) => {
+
+    let accountId = req.params.accountId;
+    
+    if(config.levyaccounts.includes(accountId))
+    {
+        sendFile(res, '/api/status-auto.json');
+        return;
+    }
+
+    sendFile(res, '/api/status-manual.json');
+
+});
+
+app.post('/api/accounts/:accountId/bulk-create', (req, res) => {
+
+    let accountId = req.params.accountId;
+    let requestedCount = req.getFromBody("count");
+    
+    if(config.levyaccounts.includes(accountId))
+    {
+        let result = {
+            reservations: []
+        };
+        
+        for(let i=0; i<requestedCount;i++)
+        {
+            result.reservations[i] = uuidv1()
+        }
+        
+        res.status(200).send(result);
+        return;
+    }
+
+    res.status(500).send('Non-Levy accounts cannot bulk create reservations');
+    
+});
+
 
 
 //Reservations API validation endpoint
@@ -135,7 +174,7 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     console.log(String.Format("Validation request for Account {0}, Course: {1}, StartDate: {2}", accountId, course, startDate));
 
     //Levy payer gets a green light
-    if(accountId === "8194")
+    if(config.levyaccounts.includes(accountId))
     {
         console.log("Reservation validation request from levy payer - simulates auto-create-reservation");
         sendFile(res, '/api/okResponse.json');
@@ -184,7 +223,7 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
         return;
     }
 
-    if(startDate === "2019-01-01 00:00:00")
+    if(startDate === "2019-01-01 00:00:00" || startDate === "2019-01-01T00:00:00")
     {
         sendFile(res, '/api/startDateErrorResponse.json');
         return;
@@ -193,6 +232,7 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
+
 
 
 /* not sure why this is here */
