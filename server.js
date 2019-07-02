@@ -41,7 +41,7 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
     }
 
     //simulate levy-payer auto create and redirect
-    if(employerId === "XEGE5X" || employerId === "XJGZ72" || transferSenderId !== undefined)
+    if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
@@ -98,12 +98,12 @@ app.get("/:providerId/reservations", (req, res) => {
             {
                 reservationTitle: "MegaCorp Pharmaceuticals (levy)",
                 reservationSubtitle: "No pre-selection of values; validation always succeeds",
-                accountLegalEntityId: 'XEGE5X',
+                accountLegalEntityId: 'XJGZ72',
                 reservationUrl: String.Format("{0}/{1}/unapproved/add-apprentice?reservationId={2}&employerAccountLegalEntityPublicHashedId={3}",
                     config.providerCommitmentsBaseUrl,
                     providerId,
                     uuidv1(),
-                    'XEGE5X')
+                    'XJGZ72')
             },
             {
                 reservationTitle: "Rapid Logistics (non levy)",
