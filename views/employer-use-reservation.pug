@@ -1,0 +1,47 @@
+html
+    head
+        title Reservations
+        link(rel="stylesheet", href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css")
+    body
+
+
+        div(class="container")
+
+            div(class="jumbotron")
+                h1(class="display-4") Reservations Stub
+                hr(class="my-4")
+                p(class="lead")
+
+                h3(class="display-5") Use Reservation (Employer)
+
+                p From here the Employer will either use an existing, or create a new, reservation, ultimately electing to use it
+                
+
+                div(class="row")
+                    each r in reservations
+                        div(class="col-md-6")
+                            div(class="card")
+                                div(class="card-block")
+                                    div(class="card-body")
+                                        h5(class="card-title") #{r.reservationTitle}
+                                        div #{r.reservationSubtitle}
+                                        a(href=r.reservationUrl class="btn btn-success") Use Reservation                
+
+                hr(class="my-4")
+                div(class="row")
+
+                    div(class="card")
+                        div(class="card-block")
+                            div(class="card-body")
+                                h5(class="card-title") Reservation validation failure scenarios
+
+                                span Reservation validation will fail for non-levy for:
+                                    ul
+                                        li Funeral Director course (Standard 411)
+                                        li Start date of Jan-2019
+
+                hr(class="my-4")
+
+
+
+

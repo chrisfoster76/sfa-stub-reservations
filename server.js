@@ -23,69 +23,9 @@ app.get("/", (req, res) => {
     res.render('splash');
 });
 
+ 
 
-//Reservation selection page, used in "Add Another Apprentice" journey
-//If transfer sender id is included, the endpoint assumes that the sender is a levy payer so the user gets an "auto" reservation
-app.get("/:providerId/reservations/:employerId/select", (req, res) => {
-    
-    let providerId = req.params.providerId;
-    let employerId = req.params.employerId;
-    
-    let cohortRef = req.getFromQueryString("cohortReference");
-    let transferSenderId = req.getFromQueryString("transferSenderId");
-   
-    console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
-    if(transferSenderId !== undefined)
-    {
-        console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
-    }
-
-    //simulate levy-payer auto create and redirect
-    if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
-    {
-        console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
-        
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}{5}",
-            config.providerCommitmentsBaseUrl,
-            providerId,
-            cohortRef === undefined ? "" : cohortRef + "/",
-            uuidv1(),
-            employerId,
-            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
-        );
-        
-        res.redirect(redirectUrl);
-        return;
-    }
-    
-    //non-levy payer must select a reservation
-    let viewmodel = {
-        providerId : providerId,
-        cohortRef: cohortRef,
-        reservations : [
-            {
-                reservationTitle: "Geospatial Survey Technician (244) June 2019",
-                reservationSubtitle: "",
-                accountLegalEntityId: employerId,
-                reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
-                    config.providerCommitmentsBaseUrl,
-                    providerId,
-                    cohortRef === undefined ? "" : cohortRef + "/",
-                    uuidv1(),
-                    employerId,
-                    "244",
-                    "062019"
-                )
-            }
-        ]
-    };
-    
-    res.render('select-reservation', viewmodel);
-});
-    
-
-//Reservations endpoint - simulates start of Reservations journey
+//Provider Reservations endpoint - simulates start of Provider Reservations journey
 app.get("/:providerId/reservations", (req, res) => {
 
     let providerId = req.params.providerId;
@@ -122,6 +62,68 @@ app.get("/:providerId/reservations", (req, res) => {
 
     res.render('use-reservation', viewmodel);
 });
+
+
+//Provider Reservation selection page, used in "Add Another Apprentice" journey
+//If transfer sender id is included, the endpoint assumes that the sender is a levy payer so the user gets an "auto" reservation
+app.get("/:providerId/reservations/:employerId/select", (req, res) => {
+
+    let providerId = req.params.providerId;
+    let employerId = req.params.employerId;
+
+    let cohortRef = req.getFromQueryString("cohortReference");
+    let transferSenderId = req.getFromQueryString("transferSenderId");
+
+    console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
+    if(transferSenderId !== undefined)
+    {
+        console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
+    }
+
+    //simulate levy-payer auto create and redirect
+    if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
+    {
+        console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
+
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}{5}",
+            config.providerCommitmentsBaseUrl,
+            providerId,
+            cohortRef === undefined ? "" : cohortRef + "/",
+            uuidv1(),
+            employerId,
+            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
+        );
+
+        res.redirect(redirectUrl);
+        return;
+    }
+
+    //non-levy payer must select a reservation
+    let viewmodel = {
+        providerId : providerId,
+        cohortRef: cohortRef,
+        reservations : [
+            {
+                reservationTitle: "Geospatial Survey Technician (244) June 2019",
+                reservationSubtitle: "",
+                accountLegalEntityId: employerId,
+                reservationDescription: "",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
+                    config.providerCommitmentsBaseUrl,
+                    providerId,
+                    cohortRef === undefined ? "" : cohortRef + "/",
+                    uuidv1(),
+                    employerId,
+                    "244",
+                    "062019"
+                )
+            }
+        ]
+    };
+
+    res.render('select-reservation', viewmodel);
+});
+
 
 /* new endpoints to go here */
 app.get('/api/accounts/:accountId/status',(req, res) => {
@@ -163,7 +165,6 @@ app.post('/api/accounts/:accountId/bulk-create', (req, res) => {
 });
 
 
-
 //Reservations API validation endpoint
 app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
@@ -200,6 +201,7 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 });
 
 
+/*
 //Reservations API validation endpoint - OLD Version. Should be removed!
 app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 
@@ -232,10 +234,51 @@ app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
+*/
 
 
+/* employer routes */
 
-/* not sure why this is here */
+//https://approvals.test2-eas.apprenticeships.education.gov.uk/V6P4K8/organisations/YEDE5N/unapproved/add?providerId=1005077&coursecode=407&startMonthYear=102019
+
+
+//Provider Reservations endpoint - simulates start of Employer Reservations journey
+app.get("/accounts/:accountId/reservations", (req, res) => {
+
+    let accountId = req.params.accountId;
+    
+    console.log("Reservation selection for Employer Account: " + accountId);
+    
+    let reservations = config.employerReservations.filter(function(item){ return item.accountId === accountId });
+    
+    let viewmodel = {
+        reservations: []
+    };
+    
+    reservations.forEach(reservation => {
+    
+        viewmodel.reservations.push({
+           reservationTitle: reservation.title,
+           reservationSubtitle: reservation.subtitle,
+           accountLegalEntityId: reservation.accountLegalEntityId,
+           reservationUrl:  String.Format("{0}/{1}/unapproved/add?reservationId={2}&employerAccountLegalEntityPublicHashedId={3}&courseCode={4}&startMonthYear={5}",
+               config.employerCommitmentsBaseUrl,
+               accountId,
+               uuidv1(),
+               reservation.accountLegalEntityId,
+               reservation.courseCode,
+               reservation.startMonthYear
+               )
+        });
+        
+    });
+    
+    res.render('employer-use-reservation', viewmodel);
+});
+    
+
+
+/* serve up api requests */
 app.get('/api/*',(req, res) => {
     sendFile(res, req.url, req.method);
 });
