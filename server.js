@@ -23,7 +23,6 @@ app.get("/", (req, res) => {
     res.render('splash');
 });
 
- 
 
 //Provider Reservations endpoint - simulates start of Provider Reservations journey
 app.get("/:providerId/reservations", (req, res) => {
@@ -179,6 +178,7 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     {
         console.log("Reservation validation request from levy payer - simulates auto-create-reservation");
         sendFile(res, '/api/okResponse.json');
+        return;
     }
     
     //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
@@ -201,45 +201,8 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
 });
 
 
-/*
-//Reservations API validation endpoint - OLD Version. Should be removed!
-app.put('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
-
-    let course = req.getFromBody("coursecode");
-    let startDate = req.getFromBody("StartDate");
-    
-    console.log(String.Format("Validation request for Account {0}, Course: {1}, StartDate: {2}", req.params.accountId, course, startDate));
-
-    //Levy payer gets a green light
-    if(req.params.accountId === "8194")
-    {
-        console.log("Reservation validation request from levy payer - will green light");
-        sendFile(res, '/api/okResponse.json');
-    }
-
-    //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
-    if(course === "411")
-    {
-        console.log("Course 411 - simulates course error");
-        sendFile(res, '/api/courseErrorResponse.json');
-        return;
-    }
-
-    if(startDate === "2019-01-01 00:00:00" || startDate === "2019-01-01T00:00:00")
-    {
-        sendFile(res, '/api/startDateErrorResponse.json');
-        return;
-    }
-
-    //default to ok for happy testing
-    sendFile(res, '/api/okResponse.json');
-});
-*/
-
 
 /* employer routes */
-
-//https://approvals.test2-eas.apprenticeships.education.gov.uk/V6P4K8/organisations/YEDE5N/unapproved/add?providerId=1005077&coursecode=407&startMonthYear=102019
 
 
 //Provider Reservations endpoint - simulates start of Employer Reservations journey
@@ -275,7 +238,16 @@ app.get("/accounts/:accountId/reservations", (req, res) => {
     
     res.render('employer-use-reservation', viewmodel);
 });
-    
+
+
+//Provider Reservation selection page, used in "Add Another Apprentice" journey
+//If transfer sender id is included, the endpoint assumes that the sender is a levy payer so the user gets an "auto" reservation
+
+//Provider Select Reservation endpoint
+app.get("/accounts/:accountId/reservations", (req, res) => {
+
+
+});
 
 
 /* serve up api requests */
