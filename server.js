@@ -164,7 +164,7 @@ app.post('/api/accounts/:accountId/bulk-create', (req, res) => {
 });
 
 
-//Reservations API validation endpoint
+//Reservations API validation endpoint - DEFUNCT!
 app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     
     let accountId = req.params.accountId;
@@ -196,6 +196,46 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
         return;
     }
     
+    //default to ok for happy testing
+    sendFile(res, '/api/okResponse.json');
+});
+
+
+
+//Reservations API validation endpoint - new!!
+app.get('/api/reservations/validate/:reservationId*',(req, res) => {
+
+    let course = req.getFromQueryString("courseCode");
+    let startDate = new Date(req.getFromQueryString("startDate"));
+
+    console.log(String.Format("Validation request for Course: {1}, StartDate: {2}", course, startDate));
+
+    //we can't do this green-light simulation because accountId is no longer included
+    //Levy payer gets a green light
+    /*
+    if(config.levyaccounts.includes(accountId))
+    {
+        console.log("Reservation validation request from levy payer - simulates auto-create-reservation");
+        sendFile(res, '/api/okResponse.json');
+        return;
+    }
+    */
+
+    //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
+    if(course === "411")
+    {
+        console.log("Course 411 - simulates course error");
+        sendFile(res, '/api/courseErrorResponse.json');
+        return;
+    }
+
+    if(dates.compare(startDate, new Date("2019-01-01")) === 0)
+    {
+        console.log("01 Jan 2019 - simulates start date error");
+        sendFile(res, '/api/startDateErrorResponse.json');
+        return;
+    }
+
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
