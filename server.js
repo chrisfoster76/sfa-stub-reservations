@@ -208,7 +208,7 @@ app.get('/api/reservations/validate/:reservationId*',(req, res) => {
     let course = req.getFromQueryString("courseCode");
     let startDate = new Date(req.getFromQueryString("startDate"));
 
-    console.log(String.Format("Validation request for Course: {1}, StartDate: {2}", course, startDate));
+    console.log(String.Format("Validation request v2 for Course: {1}, StartDate: {2}", course, startDate));
 
     //we can't do this green-light simulation because accountId is no longer included
     //Levy payer gets a green light
@@ -224,14 +224,14 @@ app.get('/api/reservations/validate/:reservationId*',(req, res) => {
     //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
     if(course === "411")
     {
-        console.log("Course 411 - simulates course error");
+        console.log("Course 411 - simulates course error (v2)");
         sendFile(res, '/api/courseErrorResponse.json');
         return;
     }
 
     if(dates.compare(startDate, new Date("2019-01-01")) === 0)
     {
-        console.log("01 Jan 2019 - simulates start date error");
+        console.log("01 Jan 2019 - simulates start date error (v2)");
         sendFile(res, '/api/startDateErrorResponse.json');
         return;
     }
