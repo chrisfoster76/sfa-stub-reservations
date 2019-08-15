@@ -128,8 +128,9 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
 app.get('/api/accounts/:accountId/status',(req, res) => {
 
     let accountId = req.params.accountId;
+    let transferSenderId = req.getFromQueryString("transferSenderId");
     
-    if(config.levyaccounts.includes(accountId))
+    if(config.levyaccounts.includes(accountId) || config.levyaccounts.includes(transferSenderId))
     {
         sendFile(res, '/api/status-auto.json');
         return;
@@ -143,8 +144,9 @@ app.post('/api/accounts/:accountId/bulk-create', (req, res) => {
 
     let accountId = req.params.accountId;
     let requestedCount = req.getFromBody("count");
+    let transferSenderId = req.getFromBody("transferSenderId").toString();
     
-    if(config.levyaccounts.includes(accountId))
+    if(config.levyaccounts.includes(accountId) || config.levyaccounts.includes(transferSenderId))
     {
         let result = {
             reservations: []
