@@ -11,7 +11,7 @@ config.employerCommitmentsBaseUrl = "https://localhost:44376";
 
 config.levyaccounts = ['8194', '8193'];
 config.levyaccountlegalentities = ['2817', '2818'];
-config.hashedlevyaccountlegalentities = ['X9JE72','XJGZ72'];
+config.hashedlevyaccountlegalentities = ['XEGE5X','XJGZ72'];
 
 
 config.employerReservations = [
