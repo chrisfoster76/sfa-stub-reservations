@@ -210,7 +210,7 @@ app.get('/api/reservations/validate/:reservationId*',(req, res) => {
     let course = req.getFromQueryString("courseCode");
     let startDate = new Date(req.getFromQueryString("startDate"));
 
-    console.log(String.Format("Validation request v2 for Course: {1}, StartDate: {2}", course, startDate));
+    console.log(String.Format("Validation request v2 for Course: {0}, StartDate: {1}", course, startDate));
 
     //we can't do this green-light simulation because accountId is no longer included
     //Levy payer gets a green light
