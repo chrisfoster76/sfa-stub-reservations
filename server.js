@@ -35,16 +35,6 @@ app.get("/:providerId/reservations", (req, res) => {
         providerId : providerId,
         reservations : [
             {
-                reservationTitle: "MegaCorp Pharmaceuticals (levy)",
-                reservationSubtitle: "No pre-selection of values; validation always succeeds",
-                accountLegalEntityId: 'XJGZ72',
-                reservationUrl: String.Format("{0}/{1}/unapproved/add-apprentice?reservationId={2}&employerAccountLegalEntityPublicHashedId={3}",
-                    config.providerCommitmentsBaseUrl,
-                    providerId,
-                    uuidv1(),
-                    'XJGZ72')
-            },
-            {
                 reservationTitle: "Rapid Logistics (non levy)",
                 reservationSubtitle: "Reservation with for Geospatial Survey Technician (244) June 2019",
                 accountLegalEntityId: 'X9JE72',
@@ -161,7 +151,7 @@ app.post('/api/accounts/:accountLegalEntityId/bulk-create', (req, res) => {
         return;
     }
 
-    res.status(500).send('Non-Levy accounts cannot bulk create reservations');
+    res.status(400).send('Non-Levy accounts cannot bulk create reservations');
     
 });
 
@@ -253,6 +243,13 @@ app.get("/accounts/:accountId/reservations", (req, res) => {
     let accountId = req.params.accountId;
     
     console.log("Reservation selection for Employer Account: " + accountId);
+    
+    if(config.hashedLevyAccounts.includes(accountId))
+    {
+        res.status(400).send('This endpoint is not appropriate for levy paying employers, who have no reservations UI');
+        return;
+
+    }
     
     let reservations = config.employerReservations.filter(function(item){ return item.accountId === accountId });
     
