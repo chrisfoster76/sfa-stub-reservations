@@ -1,3 +1,3 @@
 {
-  "AutoReservations": true
+  "CanAutoCreateReservations": true
 }
