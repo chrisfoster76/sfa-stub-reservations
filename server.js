@@ -130,7 +130,7 @@ app.get('/api/accounts/:accountId/status',(req, res) => {
 
 });
 
-app.post('/api/accounts/:accountLegalEntityId/bulk-create', (req, res) => {
+app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, res) => {
 
     let accountLegalEntityId = req.params.accountLegalEntityId;
     let requestedCount = req.getFromBody("count");
@@ -155,6 +155,7 @@ app.post('/api/accounts/:accountLegalEntityId/bulk-create', (req, res) => {
     
 });
 
+/*
 
 //Reservations API validation endpoint - DEFUNCT!
 app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
@@ -191,6 +192,7 @@ app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
     //default to ok for happy testing
     sendFile(res, '/api/okResponse.json');
 });
+*/
 
 
 
