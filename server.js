@@ -299,15 +299,15 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
         console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
     }
 
-    //simulate levy-payer auto create and redirect
+    //simulate levy-payer auto create and redirect (includes transfer receiver)
     if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
 
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&accountLegalEntityHashedId={4}{5}&autocreated=true",
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}&autocreated=true",
             config.employerCommitmentsBaseUrl,
             employerId,
-            cohortRef === undefined ? "" : cohortRef + "/",
+            cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
             uuidv1(),
             legalEntityId,
             transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
@@ -326,10 +326,10 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
                 reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}",
                     config.employerCommitmentsBaseUrl,
                     employerId,
-                    cohortRef === undefined ? "" : cohortRef + "/",
+                    cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
                     uuidv1(),
                     legalEntityId,
                     "244",
