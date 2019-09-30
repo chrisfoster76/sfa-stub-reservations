@@ -292,25 +292,27 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
 
     let cohortRef = req.getFromQueryString("cohortReference");
     let transferSenderId = req.getFromQueryString("transferSenderId");
+    let providerId = req.getFromQueryString("providerId");
 
     console.log(String.Format("Reservation selection for Employer: {0}, Ale: {1}", employerId, legalEntityId));
     if(transferSenderId !== undefined)
     {
         console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
     }
-
+    
     //simulate levy-payer auto create and redirect (includes transfer receiver)
     if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
-
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}&autocreated=true",
+        
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}{6}&autocreated=true",
             config.employerCommitmentsBaseUrl,
             employerId,
             cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
             uuidv1(),
             legalEntityId,
-            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
+            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId,
+            providerId === undefined ? "" : "&providerId=" + providerId
         );
 
         res.redirect(redirectUrl);
@@ -326,14 +328,15 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
                 reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}{7}",
                     config.employerCommitmentsBaseUrl,
                     employerId,
                     cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
                     uuidv1(),
                     legalEntityId,
                     "244",
-                    "062019"
+                    "062019",
+                    providerId === undefined ? "" : "&providerId=" + providerId
                 )
             }
         ]
