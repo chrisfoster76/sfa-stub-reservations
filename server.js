@@ -24,6 +24,12 @@ app.get("/", (req, res) => {
 });
 
 
+app.get("/ping", (req, res) => {
+   
+    res.status(200).send();
+    
+});
+
 //Provider Reservations endpoint - simulates start of Provider Reservations journey
 app.get("/:providerId/reservations", (req, res) => {
 
