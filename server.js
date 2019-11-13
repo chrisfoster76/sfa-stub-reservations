@@ -136,13 +136,13 @@ app.get('/api/accounts/:accountId/status',(req, res) => {
 
 });
 
-app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, res) => {
+app.post('/api/reservations/accounts/:accountId/bulk-create', (req, res) => {
 
-    let accountLegalEntityId = req.params.accountLegalEntityId;
+    let accountId = req.params.accountId;
     let requestedCount = req.getFromBody("count");
     let transferSenderId = String(req.getFromBody("transferSenderId"));
     
-    if(config.levyaccountlegalentities.includes(accountLegalEntityId) || config.levyaccounts.includes(transferSenderId))
+    if(config.levyaccounts.includes(accountId) || config.levyaccounts.includes(transferSenderId))
     {
         let result = {
             reservations: []
