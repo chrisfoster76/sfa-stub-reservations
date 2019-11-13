@@ -145,12 +145,12 @@ app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, r
     if(config.levyaccountlegalentities.includes(accountLegalEntityId) || config.levyaccounts.includes(transferSenderId))
     {
         let result = {
-            reservations: []
+            reservationIds: []
         };
         
         for(let i=0; i<requestedCount;i++)
         {
-            result.reservations[i] = uuidv1()
+            result.reservationIds[i] = uuidv1()
         }
         
         res.status(200).send(result);
