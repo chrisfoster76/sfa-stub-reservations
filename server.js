@@ -308,7 +308,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     }
     
     //simulate levy-payer auto create and redirect (includes transfer receiver)
-    if(config.hashedlevyaccountlegalentities.includes(employerId) || (transferSenderId !== undefined))
+    if(config.hashedLevyAccounts.includes(employerId) || (transferSenderId !== undefined))
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
