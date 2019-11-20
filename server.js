@@ -298,6 +298,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
 
     let cohortRef = req.getFromQueryString("cohortReference");
     let transferSenderId = req.getFromQueryString("transferSenderId");
+    if(transferSenderId === "" ) {transferSenderId = undefined; }
     let providerId = req.getFromQueryString("providerId");
 
     console.log(String.Format("Reservation selection for Employer: {0}, Ale: {1}", employerId, legalEntityId));
