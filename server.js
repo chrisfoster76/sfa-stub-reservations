@@ -68,6 +68,7 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
 
     let cohortRef = req.getFromQueryString("cohortReference");
     let transferSenderId = req.getFromQueryString("transferSenderId");
+    let journeyData = req.getFromQueryString("journeydata");
 
     console.log(String.Format("Reservation selection for Provider: {0}, Employer: {1}", providerId, employerId));
     if(transferSenderId !== undefined)
@@ -80,13 +81,14 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
 
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}{5}&autocreated=true",
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}{5}{6}&autocreated=true",
             config.providerCommitmentsBaseUrl,
             providerId,
             cohortRef === undefined ? "" : cohortRef + "/",
             uuidv1(),
             employerId,
-            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId
+            transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId,
+            journeyData === undefined ? "" : "&journeydata=" + journeyData
         );
 
         res.redirect(redirectUrl);
@@ -103,14 +105,15 @@ app.get("/:providerId/reservations/:employerId/select", (req, res) => {
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
                 reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}apprentices/add?reservationId={3}&employerAccountLegalEntityPublicHashedId={4}&courseCode={5}&startMonthYear={6}{7}",
                     config.providerCommitmentsBaseUrl,
                     providerId,
                     cohortRef === undefined ? "" : cohortRef + "/",
                     uuidv1(),
                     employerId,
                     "244",
-                    "062019"
+                    "062019",
+                    journeyData === undefined ? "" : "&journeydata=" + journeyData
                 )
             }
         ]
@@ -160,46 +163,6 @@ app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, r
     res.status(400).send('Non-Levy accounts cannot bulk create reservations');
     
 });
-
-/*
-
-//Reservations API validation endpoint - DEFUNCT!
-app.get('/api/accounts/:accountId/reservations/:reservationId*',(req, res) => {
-    
-    let accountId = req.params.accountId;
-    let course = req.getFromQueryString("courseCode");
-    let startDate = new Date(req.getFromQueryString("startDate"));
-
-    console.log(String.Format("Validation request for Account {0}, Course: {1}, StartDate: {2}", accountId, course, startDate));
-
-    //Levy payer gets a green light
-    if(config.levyaccounts.includes(accountId))
-    {
-        console.log("Reservation validation request from levy payer - simulates auto-create-reservation");
-        sendFile(res, '/api/okResponse.json');
-        return;
-    }
-    
-    //Non-levy payer - baked in failures for Funeral Director Course and Jan 19 Start Dates
-    if(course === "411")
-    {
-        console.log("Course 411 - simulates course error");
-        sendFile(res, '/api/courseErrorResponse.json');
-        return;
-    }
-    
-    if(dates.compare(startDate, new Date("2019-01-01")) === 0)
-    {
-        console.log("01 Jan 2019 - simulates start date error");
-        sendFile(res, '/api/startDateErrorResponse.json');
-        return;
-    }
-    
-    //default to ok for happy testing
-    sendFile(res, '/api/okResponse.json');
-});
-*/
-
 
 
 //Reservations API validation endpoint - new!!
@@ -300,6 +263,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     let transferSenderId = req.getFromQueryString("transferSenderId");
     if(transferSenderId === "" ) {transferSenderId = undefined; }
     let providerId = req.getFromQueryString("providerId");
+    let journeyData = req.getFromQueryString("journeydata");
 
     console.log(String.Format("Reservation selection for Employer: {0}, Ale: {1}", employerId, legalEntityId));
     if(transferSenderId !== undefined)
@@ -312,14 +276,15 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}{6}&autocreated=true",
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}{6}{7}&autocreated=true",
             config.employerCommitmentsBaseUrl,
             employerId,
             cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
             uuidv1(),
             legalEntityId,
             transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId,
-            providerId === undefined ? "" : "&providerId=" + providerId
+            providerId === undefined ? "" : "&providerId=" + providerId,
+            journeyData === undefined ? "" : "&journeydata=" + journeyData
         );
 
         res.redirect(redirectUrl);
@@ -335,7 +300,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
                 reservationDescription: "",
-                reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}{7}",
+                reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}{7}{8}",
                     config.employerCommitmentsBaseUrl,
                     employerId,
                     cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
@@ -343,7 +308,8 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
                     legalEntityId,
                     "244",
                     "062019",
-                    providerId === undefined ? "" : "&providerId=" + providerId
+                    providerId === undefined ? "" : "&providerId=" + providerId,
+                    journeyData === undefined ? "" : "&journeydata=" + journeyData
                 )
             }
         ]
