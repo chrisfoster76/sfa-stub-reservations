@@ -299,6 +299,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
                 reservationTitle: "Geospatial Survey Technician (244) June 2019",
                 reservationSubtitle: "",
                 accountLegalEntityId: employerId,
+                backUrl: "https://localhost:44376/" + employerId + "/unapproved/add/assign?ProviderId=" + providerId + "&AccountLegalEntityHashedId=" + legalEntityId,
                 reservationDescription: "",
                 reservationUrl: String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}&courseCode={5}&startMonthYear={6}{7}{8}",
                     config.employerCommitmentsBaseUrl,
