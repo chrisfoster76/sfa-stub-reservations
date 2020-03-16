@@ -164,6 +164,19 @@ app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, r
     
 });
 
+//Reservations API Change of Party endpoint
+//TODO
+app.post('/api/reservations/:reservationId/change-of-party', (req, res) => {
+
+    let reservationId = req.params.reservationId;
+    console.log(String.Format("Change-of-Party request for {0}", reservationId));
+
+    let newReservationId = uuidv1();
+    let result = String.Format("{ reservationId: \"{0}\" }", newReservationId);
+    res.status(200).send(result);
+    
+});
+
 
 //Reservations API validation endpoint - new!!
 app.get('/api/reservations/validate/:reservationId*',(req, res) => {
@@ -291,10 +304,20 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
         return;
     }
 
+    let backUrl = "";
+    if(cohortRef === undefined)
+    {
+        backUrl = "https://localhost:44376/" + employerId + "/unapproved/add/assign?ProviderId=" + providerId + "&AccountLegalEntityHashedId=" + legalEntityId;
+    }
+    else
+    {
+        backUrl = "https://localhost:44376/" + employerId + "/unapproved/" + cohortRef + "&AccountLegalEntityHashedId=" + legalEntityId;
+    }
+    
     //non-levy payer must select a reservation
     let viewmodel = {
         cohortRef: cohortRef,
-        backUrl: "https://localhost:44376/" + employerId + "/unapproved/add/assign?ProviderId=" + providerId + "&AccountLegalEntityHashedId=" + legalEntityId,
+        backUrl: backUrl,
         reservations : [
             {
                 reservationTitle: "Geospatial Survey Technician (244) June 2019",
