@@ -311,7 +311,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     }
     else
     {
-        backUrl = "https://localhost:44376/" + employerId + "/unapproved/" + cohortRef + "&AccountLegalEntityHashedId=" + legalEntityId;
+        backUrl = "https://localhost:44376/" + employerId + "/unapproved/" + cohortRef;
     }
     
     //non-levy payer must select a reservation
