@@ -166,7 +166,7 @@ app.post('/api/reservations/accounts/:accountLegalEntityId/bulk-create', (req, r
 
 //Reservations API Change of Party endpoint
 //TODO
-app.post('/api/reservations/:reservationId/change-of-party', (req, res) => {
+app.post('/api/reservations/:reservationId/change', (req, res) => {
 
     let reservationId = req.params.reservationId;
     console.log(String.Format("Change-of-Party request for {0}", reservationId));
