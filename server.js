@@ -291,7 +291,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     {
         console.log("Simulating greenlight for levy payer - auto redirecting to add apprentice");
         
-        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}{6}{7}&autocreated=true",
+        let redirectUrl = String.Format("{0}/{1}/unapproved/{2}?reservationId={3}&accountLegalEntityHashedId={4}{5}{6}{7}{8}&autocreated=true",
             config.employerCommitmentsBaseUrl,
             employerId,
             cohortRef === undefined ? "add/apprentice" : cohortRef + "/apprentices/add",
