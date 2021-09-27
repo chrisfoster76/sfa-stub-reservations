@@ -277,6 +277,8 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     if(transferSenderId === "" ) {transferSenderId = undefined; }
     let providerId = req.getFromQueryString("providerId");
     let journeyData = req.getFromQueryString("journeydata");
+    let encodedPledgeApplicationId = req.getFromQueryString("encodedPledgeApplicationId");
+    if(encodedPledgeApplicationId === "") { encodedPledgeApplicationId = undefined; }
 
     console.log(String.Format("Reservation selection for Employer: {0}, Ale: {1}", employerId, legalEntityId));
     if(transferSenderId !== undefined)
@@ -296,6 +298,7 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
             uuidv1(),
             legalEntityId,
             transferSenderId === undefined ? "" : "&transferSenderId=" + transferSenderId,
+            encodedPledgeApplicationId === undefined ? "" : "&encodedPledgeApplicationId=" + encodedPledgeApplicationId,
             providerId === undefined ? "" : "&providerId=" + providerId,
             journeyData === undefined ? "" : "&journeydata=" + journeyData
         );
