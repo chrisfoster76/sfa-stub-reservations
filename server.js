@@ -284,6 +284,10 @@ app.get("/accounts/:accountId/reservations/:legalEntityId/select", (req, res) =>
     if(transferSenderId !== undefined)
     {
         console.log(String.Format("Transfer Sender {0} indicated", transferSenderId));
+        if(encodedPledgeApplicationId !== undefined)
+        {
+            console.log(String.Format("Pledge Application Id {0} indicated", encodedPledgeApplicationId));
+        }
     }
     
     //simulate levy-payer auto create and redirect (includes transfer receiver)
